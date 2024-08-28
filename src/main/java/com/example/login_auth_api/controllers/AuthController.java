@@ -29,7 +29,7 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody LoginRequestDTO loginDTO){
 		Users user = this.userRepository.findByEmail(loginDTO.email()).orElseThrow(() -> new RuntimeException("User not found"));
-		if(passwordEncoder.matches(user.getPassword(), loginDTO.password())){
+		if(passwordEncoder.matches(loginDTO.password(), user.getPassword())){
 			String token = this.tokenService.generateToken(user);
 			return ResponseEntity.ok(new ResponseDTO(user.getName(), token));
 		}
